@@ -24,7 +24,8 @@ namespace DevTracker.API.Infrastructure.Extensions
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+                var connectionString = GetAppSettings(services, config).ConnectionString;
+                options.UseSqlServer(connectionString);
             });
 
             return services;

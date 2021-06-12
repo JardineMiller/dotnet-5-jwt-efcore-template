@@ -16,8 +16,9 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "docs/index",
       "environmentVariables": {
+        "Key": "Value",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
@@ -34,9 +35,17 @@
     "IISX-Production": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "docs/index",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
+      }
+    },
+    "IISX-Snapshot": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "docs/index",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Snapshot"
       }
     }
   }
