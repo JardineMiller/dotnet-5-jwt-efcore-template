@@ -48,7 +48,7 @@ namespace DevTracker.API.Features.Identity.Commands
             var response = new LoginResponseModel
             {
                 UserId = user.Id,
-                UserName = user.UserName,
+                Username = user.UserName,
                 Email = user.Email,
                 Token = jwt,
                 RefreshToken = refreshToken.Token
