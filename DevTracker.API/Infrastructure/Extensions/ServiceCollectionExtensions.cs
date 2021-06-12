@@ -1,7 +1,10 @@
 using System.Text;
+using DevTracker.API.Features.Identity.Factories;
+using DevTracker.API.Infrastructure.PipelineBehaviours;
 using DevTracker.API.Infrastructure.Services;
 using DevTracker.DAL;
 using DevTracker.DAL.Models.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -78,7 +81,7 @@ namespace DevTracker.API.Infrastructure.Extensions
                     options.Password.RequireLowercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
-                    options.Password.RequiredLength = 6;
+                    options.Password.RequiredLength = ValidationConstants.User.MinimumPasswordLength;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -88,7 +91,10 @@ namespace DevTracker.API.Infrastructure.Extensions
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services
+                .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>))
+                .AddScoped<TokenFactory>()
+                .AddScoped<ICurrentUserService, CurrentUserService>();
 
             return services;
         }

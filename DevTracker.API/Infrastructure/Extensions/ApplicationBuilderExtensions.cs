@@ -1,3 +1,4 @@
+using DevTracker.API.Infrastructure.Middleware;
 using DevTracker.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -27,9 +28,9 @@ namespace DevTracker.API.Infrastructure.Extensions
             return app;
         }
 
-        // public static IApplicationBuilder UseCustomExceptionHandler(this IApplicationBuilder builder)
-        // {
-        //     return builder.UseMiddleware<CustomExceptionHandlerMiddleware>();
-        // }
+        public static IApplicationBuilder UseCustomExceptionHandler(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<CustomExceptionHandlerMiddleware>();
+        }
     }
 }

@@ -27,6 +27,7 @@ namespace DevTracker.API
                 .AddMediatR(Assembly.GetExecutingAssembly())
                 .AddIdentity()
                 .AddSwagger()
+                .AddApplicationServices()
                 .AddControllers();
         }
 
@@ -39,6 +40,7 @@ namespace DevTracker.API
             }
 
             app
+                .UseCustomExceptionHandler()
                 .UseSwaggerUI()
                 .UseHttpsRedirection()
                 .UseRouting()
