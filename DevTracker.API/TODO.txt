@@ -1,0 +1,4 @@
+- Add Serilog
+- Add API versioning
+    - ElegantVersioning
+    - Integrate with Swagger docs somehow?

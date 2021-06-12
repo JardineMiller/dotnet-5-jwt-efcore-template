@@ -19,10 +19,7 @@ namespace DevTracker.API.Infrastructure.Extensions
     {
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "DevTracker.API", Version = "v1"});
-            });
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "DevTracker.API", Version = "v1"}); });
 
             return services;
         }
@@ -86,7 +83,6 @@ namespace DevTracker.API.Infrastructure.Extensions
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             return services;
-            ;
         }
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
