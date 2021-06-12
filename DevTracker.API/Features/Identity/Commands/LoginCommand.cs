@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DevTracker.API.Features.Identity.Factories;
@@ -9,12 +11,13 @@ using DevTracker.DAL.Models.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace DevTracker.API.Features.Identity.Commands
 {
     public class LoginCommand : IRequest<LoginResponseModel>
     {
-        public string UserName { get; set; }
+        public string Username { get; set; }
         public string Password { get; set; }
     }
 
@@ -34,14 +37,28 @@ namespace DevTracker.API.Features.Identity.Commands
 
         public async Task<LoginResponseModel> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var user = await this.userManager.FindByNameAsync(request.UserName);
+            var user = await this.userManager.Users
+                    .Include(x => x.RefreshTokens)
+                    .FirstOrDefaultAsync(x => x.UserName == request.Username, cancellationToken: cancellationToken);
 
             await ValidateUserInfo(request, user);
 
             var jwt = this.tokenFactory.GenerateJwtToken(user.Id, user.UserName);
             var refreshToken = this.tokenFactory.GenerateRefreshToken();
 
+            if (user.RefreshTokens.Any())
+            {
+                var lastToken = user.RefreshTokens.Last();
+
+                if (lastToken.IsActive)
+                {
+                    lastToken.ReplacedBy = refreshToken.Token;
+                    lastToken.RevokedOn = DateTime.UtcNow;
+                }
+            }
+
             user.RefreshTokens.Add(refreshToken);
+
             this.context.Update(user);
             this.context.SaveChanges();
 
@@ -61,7 +78,7 @@ namespace DevTracker.API.Features.Identity.Commands
         {
             if (user == null)
             {
-                throw new NotFoundException(nameof(User), request.UserName);
+                throw new NotFoundException(nameof(User), request.Username);
             }
 
             var passwordValid = await this.userManager.CheckPasswordAsync(user, request.Password);
@@ -77,7 +94,7 @@ namespace DevTracker.API.Features.Identity.Commands
     {
         public LoginCommandValidator()
         {
-            RuleFor(l => l.UserName)
+            RuleFor(l => l.Username)
                 .NotEmpty()
                 .NotNull();
 
