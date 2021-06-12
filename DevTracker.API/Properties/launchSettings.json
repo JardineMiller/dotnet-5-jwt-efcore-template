@@ -18,7 +18,6 @@
       "launchBrowser": true,
       "launchUrl": "docs/index",
       "environmentVariables": {
-        "Key": "Value",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
@@ -40,12 +39,12 @@
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
     },
-    "IISX-Snapshot": {
+    "IISX-Staging": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "docs/index",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Snapshot"
+        "ASPNETCORE_ENVIRONMENT": "Staging"
       }
     }
   }
