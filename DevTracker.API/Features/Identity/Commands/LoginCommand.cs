@@ -37,14 +37,14 @@ namespace DevTracker.API.Features.Identity.Commands
 
         public async Task<LoginResponseModel> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var user = await this.userManager.Users
-                    .Include(x => x.RefreshTokens)
-                    .FirstOrDefaultAsync(x => x.UserName == request.Username, cancellationToken: cancellationToken);
+            var user = await userManager.Users
+                .Include(x => x.RefreshTokens)
+                .FirstOrDefaultAsync(x => x.UserName == request.Username, cancellationToken);
 
             await ValidateUserInfo(request, user);
 
-            var jwt = this.tokenFactory.GenerateJwtToken(user.Id, user.UserName);
-            var refreshToken = this.tokenFactory.GenerateRefreshToken();
+            var jwt = tokenFactory.GenerateJwtToken(user.Id, user.UserName);
+            var refreshToken = tokenFactory.GenerateRefreshToken();
 
             if (user.RefreshTokens.Any())
             {
@@ -59,8 +59,8 @@ namespace DevTracker.API.Features.Identity.Commands
 
             user.RefreshTokens.Add(refreshToken);
 
-            this.context.Update(user);
-            this.context.SaveChanges();
+            context.Update(user);
+            await context.SaveChangesAsync(cancellationToken);
 
             var response = new LoginResponseModel
             {
@@ -81,7 +81,7 @@ namespace DevTracker.API.Features.Identity.Commands
                 throw new NotFoundException(nameof(User), request.Username);
             }
 
-            var passwordValid = await this.userManager.CheckPasswordAsync(user, request.Password);
+            var passwordValid = await userManager.CheckPasswordAsync(user, request.Password);
 
             if (!passwordValid)
             {

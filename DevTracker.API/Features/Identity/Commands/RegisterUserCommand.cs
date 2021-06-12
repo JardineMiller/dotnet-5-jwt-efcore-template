@@ -33,7 +33,7 @@ namespace DevTracker.API.Features.Identity.Commands
                 UserName = request.Username
             };
 
-            var result = await this.userManager.CreateAsync(user, request.Password);
+            var result = await userManager.CreateAsync(user, request.Password);
 
             if (!result.Succeeded)
             {
