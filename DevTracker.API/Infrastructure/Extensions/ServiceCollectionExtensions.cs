@@ -30,6 +30,13 @@ namespace DevTracker.API.Infrastructure.Extensions
             return services;
         }
 
+        public static AppSettings GetAppSettings(this IServiceCollection services, IConfiguration config)
+        {
+            var appSettingsConfig = config.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsConfig);
+            return appSettingsConfig.Get<AppSettings>();
+        }
+
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
             services
