@@ -1,3 +1,4 @@
+using DevTracker.API.Infrastructure.Services;
 using DevTracker.DAL;
 using DevTracker.DAL.Models.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -53,6 +54,13 @@ namespace DevTracker.API.Infrastructure.Extensions
 
             return services;
             ;
+        }
+
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        {
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+            return services;
         }
     }
 }
