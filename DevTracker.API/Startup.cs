@@ -1,4 +1,6 @@
+using System.Reflection;
 using DevTracker.API.Infrastructure.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +24,7 @@ namespace DevTracker.API
             services
                 .AddJwtAuth(Configuration)
                 .AddDatabase(Configuration)
+                .AddMediatR(Assembly.GetExecutingAssembly())
                 .AddIdentity()
                 .AddSwagger()
                 .AddControllers();
