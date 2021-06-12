@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevTracker.API", "DevTracker.API\DevTracker.API.csproj", "{F62AEF3D-3BD3-4999-8121-0B5613E87EF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevTracker.DAL", "DevTracker.DAL\DevTracker.DAL.csproj", "{F4596A30-2638-4BB3-B2B2-DF0EF6D41AFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{F62AEF3D-3BD3-4999-8121-0B5613E87EF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F62AEF3D-3BD3-4999-8121-0B5613E87EF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F62AEF3D-3BD3-4999-8121-0B5613E87EF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4596A30-2638-4BB3-B2B2-DF0EF6D41AFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4596A30-2638-4BB3-B2B2-DF0EF6D41AFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4596A30-2638-4BB3-B2B2-DF0EF6D41AFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4596A30-2638-4BB3-B2B2-DF0EF6D41AFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
