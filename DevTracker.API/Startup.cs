@@ -20,6 +20,7 @@ namespace DevTracker.API
         public void ConfigureServices(IServiceCollection services)
         {
             services
+                .AddJwtAuth(Configuration)
                 .AddDatabase(Configuration)
                 .AddIdentity()
                 .AddSwagger()
