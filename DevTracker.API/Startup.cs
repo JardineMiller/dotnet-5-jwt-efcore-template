@@ -1,4 +1,3 @@
-using System;
 using DevTracker.API.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,7 +20,7 @@ namespace DevTracker.API
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddDatabase(this.Configuration)
+                .AddDatabase(Configuration)
                 .AddIdentity()
                 .AddSwagger()
                 .AddControllers();
