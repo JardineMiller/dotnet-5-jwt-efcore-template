@@ -44,6 +44,7 @@ namespace DevTracker.API
                 .UseSwaggerUI()
                 .UseHttpsRedirection()
                 .UseRouting()
+                .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(endpoints => { endpoints.MapControllers(); })
                 .ApplyMigrations();
