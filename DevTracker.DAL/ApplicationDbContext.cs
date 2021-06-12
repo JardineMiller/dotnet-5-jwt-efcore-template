@@ -16,6 +16,8 @@ namespace DevTracker.DAL
 
         }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
