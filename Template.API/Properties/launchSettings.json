@@ -24,7 +24,7 @@
     "Template.API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "docs/index",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
