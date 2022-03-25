@@ -1,20 +1,16 @@
-using System;
-using System.Net;
 using System.Threading.Tasks;
 using Template.API.Infrastructure.Exceptions;
-using Template.API.Infrastructure.Exceptions.Identity;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Template.API.Infrastructure.Middleware
 {
     public class CustomExceptionHandlerMiddleware
     {
-        private readonly ILogger<CustomExceptionHandlerMiddleware> logger;
+        private readonly IExceptionLogger logger;
         private readonly RequestDelegate next;
 
-        public CustomExceptionHandlerMiddleware(RequestDelegate next, ILogger<CustomExceptionHandlerMiddleware> logger)
+        public CustomExceptionHandlerMiddleware(RequestDelegate next, IExceptionLogger logger)
         {
             this.next = next;
             this.logger = logger;
@@ -26,59 +22,23 @@ namespace Template.API.Infrastructure.Middleware
             {
                 await this.next(context);
             }
-            catch (Exception ex)
+            catch (HandledHttpResponseException ex)
             {
                 await HandleExceptionAsync(context, ex);
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private Task HandleExceptionAsync(HttpContext context, HandledHttpResponseException exception)
         {
-            var code = HttpStatusCode.InternalServerError;
-            var result = string.Empty;
-
-            switch (exception)
-            {
-                // case UserAccessViolation userAccessViolation:
-                //     this.logger.LogWarning($"[{nameof(UserAccessViolation)}] occurred: [{userAccessViolation.Message}]");
-                //     code = HttpStatusCode.Unauthorized;
-                //     result = "You are not permitted to perform this action.";
-                //     break;
-
-                case ExpiredTokenException expiredTokenException:
-                    code = HttpStatusCode.Unauthorized;
-                    result = "Your login has expired. Please sign in again.";
-                    break;
-
-                case NotFoundException notFoundException:
-                    this.logger.LogWarning($"[{nameof(NotFoundException)}] occurred: [{notFoundException.Message}]");
-                    code = HttpStatusCode.NotFound;
-                    result = notFoundException.Message;
-                    break;
-
-                case ValidationException validationException:
-                    this.logger.LogWarning($"[{nameof(ValidationException)}] occurred: [{JsonConvert.SerializeObject(validationException.Failures)}]");
-                    code = HttpStatusCode.BadRequest;
-                    result = JsonConvert.SerializeObject(validationException.Failures);
-                    break;
-
-                case IncorrectPasswordException incorrectPasswordException:
-                    code = HttpStatusCode.Unauthorized;
-                    result = incorrectPasswordException.Message;
-                    break;
-
-                case UserRegisterException userRegisterException:
-                    code = HttpStatusCode.BadRequest;
-                    result = JsonConvert.SerializeObject(userRegisterException.Errors);
-                    break;
-            }
+            var response = exception.CreateResponse();
+            this.logger.LogException(exception);
 
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int) code;
+            context.Response.StatusCode = (int) response.StatusCode;
 
-            result = result == string.Empty
+            var result = response.ResultMessage == string.Empty
                 ? JsonConvert.SerializeObject(new {error = exception.Message})
-                : result;
+                : response.ResultMessage;
 
             return context.Response.WriteAsync(result);
         }

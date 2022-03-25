@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using FluentValidation.Results;
+using Newtonsoft.Json;
+using Template.API.Infrastructure.Exceptions.Models;
 
 namespace Template.API.Infrastructure.Exceptions
 {
-    public class ValidationException : Exception
+    public class ValidationException : HandledHttpResponseException
     {
         public ValidationException(): base("One or more validation failures have occurred.")
         {
@@ -30,5 +33,14 @@ namespace Template.API.Infrastructure.Exceptions
         }
 
         public IDictionary<string, string[]> Failures { get; }
+        
+        public override ExceptionHttpResponse CreateResponse()
+        {
+            return new ExceptionHttpResponse()
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                ResultMessage = JsonConvert.SerializeObject(this.Failures)
+            };
+        }
     }
 }

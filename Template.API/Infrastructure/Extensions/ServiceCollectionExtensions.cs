@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Template.API.Infrastructure.Exceptions;
 
 namespace Template.API.Infrastructure.Extensions
 {
@@ -88,6 +89,7 @@ namespace Template.API.Infrastructure.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services
+                .AddSingleton<IExceptionLogger, ExceptionLogger>()
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>))
                 .AddScoped<TokenFactory>()
                 .AddScoped<ICurrentUserService, CurrentUserService>();
