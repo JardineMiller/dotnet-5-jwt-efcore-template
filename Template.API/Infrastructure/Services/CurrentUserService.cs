@@ -11,17 +11,17 @@ namespace Template.API.Infrastructure.Services
 
     public class CurrentUserService : ICurrentUserService
     {
-        private readonly ClaimsPrincipal user;
+        private readonly ClaimsPrincipal _user;
 
         public CurrentUserService(IHttpContextAccessor httpContextAccessor)
         {
-            this.user = httpContextAccessor.HttpContext?.User;
+            this._user = httpContextAccessor.HttpContext?.User;
         }
 
-        public bool IsAuthenticated() => this.user?.Identity?.IsAuthenticated ?? false;
+        public bool IsAuthenticated() => this._user?.Identity?.IsAuthenticated ?? false;
 
-        public string GetUserName() => this.user?.Identity?.Name;
+        public string GetUserName() => this._user?.Identity?.Name;
 
-        public string GetId() => this.user?.GetUsername();
+        public string GetId() => this._user?.GetUsername();
     }
 }

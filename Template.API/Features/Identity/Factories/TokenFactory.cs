@@ -11,17 +11,17 @@ namespace Template.API.Features.Identity.Factories
 {
     public class TokenFactory
     {
-        private readonly AppSettings appSettings;
+        private readonly AppSettings _appSettings;
 
         public TokenFactory(IOptions<AppSettings> appSettings)
         {
-            this.appSettings = appSettings.Value;
+            this._appSettings = appSettings.Value;
         }
 
         public string GenerateJwtToken(string userId, string userName)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(this.appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(this._appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]

@@ -18,18 +18,35 @@ public class GetUserTasksTests
     public GetUserTasksTests()
     {
         var fixture = new QueryTestBase();
-        _context = fixture.Context;
+        this._context = fixture.Context;
+
+        this._context.Tasks.Add(new DAL.Models.Entities.Task()
+        {
+            Name = "Task 1",
+            Description = null,
+            AssigneeId = "0001"
+        });
+
+        this._context.Tasks.Add(new DAL.Models.Entities.Task()
+        {
+            Name = "Task 2",
+            Description = null,
+            AssigneeId = "0001"
+        });
+
+        this._context.SaveChanges();
     }
 
     [Fact]
     public async Task GetUserTasks_WithNonExistentUserId_ShouldReturnNoTasks()
     {
-        // Arrange
         var sut = new GetUserTasksQueryHandler(this._context);
+
+        // Arrange
         var nonExistingUserId = "INVALID";
 
         // Act
-        var result = await sut.Handle(new GetUserTasksQuery() {UserId = nonExistingUserId}, CancellationToken.None);
+        var result = await sut.Handle(new GetUserTasksQuery() { UserId = nonExistingUserId }, CancellationToken.None);
 
         // Assert
         result.ShouldBeEmpty();
@@ -38,32 +55,22 @@ public class GetUserTasksTests
     [Fact]
     public async Task GetUserTasks_WithExistingUserId_ShouldReturnTaskResponseModels()
     {
-        // Arrange
-        _context.Tasks.Add(new DAL.Models.Entities.Task()
-        {
-            Name = "Task 1",
-            Description = null,
-            AssigneeId = "0001"
-        });
-
-        _context.Tasks.Add(new DAL.Models.Entities.Task()
-        {
-            Name = "Task 2",
-            Description = null,
-            AssigneeId = "0001"
-        });
-
-        _context.SaveChanges();
-
         var sut = new GetUserTasksQueryHandler(this._context);
 
+        // Arrange
         var existingUserId = "0001";
 
         // Act
-        var result = await sut.Handle(new GetUserTasksQuery() {UserId = existingUserId}, CancellationToken.None);
+        var result = (await sut.Handle(new GetUserTasksQuery() { UserId = existingUserId }, CancellationToken.None))
+            .ToList();
 
         // Assert
         result.ShouldBeOfType<List<TaskResponseModel>>();
         result.Count().ShouldBe(2);
+
+        result.Count(x => x.Name == "Task 1").ShouldBe(1);
+        result.Count(x => x.Name == "Task 2").ShouldBe(1);
+        result.Count(x => x.Description == null).ShouldBe(2);
+        result.Count(x => x.AssigneeId == "0001").ShouldBe(2);
     }
 }

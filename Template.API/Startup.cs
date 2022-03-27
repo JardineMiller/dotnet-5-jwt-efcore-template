@@ -13,7 +13,7 @@ namespace Template.API
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -22,13 +22,13 @@ namespace Template.API
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddJwtAuth(Configuration)
-                .AddDatabase(Configuration)
+                .AddJwtAuth(this.Configuration)
+                .AddDatabase(this.Configuration)
                 .AddMediatR(Assembly.GetExecutingAssembly())
                 .AddIdentity()
                 .AddSwagger()
                 .AddApplicationServices()
-                .AddControllers();
+                .AddControllersWithValidation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +41,7 @@ namespace Template.API
 
             app
                 .UseCustomExceptionHandler()
-                .UseSwaggerUI()
+                .UseSwaggerUi()
                 .UseHttpsRedirection()
                 .UseRouting()
                 .UseAuthentication()

@@ -1,4 +1,6 @@
+using System;
 using System.Text;
+using FluentValidation.AspNetCore;
 using Template.API.Features.Identity.Factories;
 using Template.API.Infrastructure.PipelineBehaviours;
 using Template.API.Infrastructure.Services;
@@ -20,7 +22,10 @@ namespace Template.API.Infrastructure.Extensions
     {
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "Template.API", Version = "v1"}); });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Template.API", Version = "v1" });
+            });
 
             return services;
         }
@@ -93,6 +98,16 @@ namespace Template.API.Infrastructure.Extensions
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>))
                 .AddScoped<TokenFactory>()
                 .AddScoped<ICurrentUserService, CurrentUserService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddControllersWithValidation(this IServiceCollection services)
+        {
+            services
+                .AddControllers()
+                .AddFluentValidation(
+                    options => options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
 
             return services;
         }

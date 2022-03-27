@@ -24,28 +24,28 @@ namespace Template.API.Features.Identity.Commands
 
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseModel>
     {
-        private readonly ApplicationDbContext context;
-        private readonly TokenFactory tokenFactory;
-        private readonly UserManager<User> userManager;
+        private readonly ApplicationDbContext _context;
+        private readonly TokenFactory _tokenFactory;
+        private readonly UserManager<User> _userManager;
 
         public LoginCommandHandler(UserManager<User> userManager, TokenFactory tokenFactory,
             ApplicationDbContext context)
         {
-            this.userManager = userManager;
-            this.tokenFactory = tokenFactory;
-            this.context = context;
+            this._userManager = userManager;
+            this._tokenFactory = tokenFactory;
+            this._context = context;
         }
 
         public async Task<LoginResponseModel> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var user = await userManager.Users
+            var user = await this._userManager.Users
                 .Include(x => x.RefreshTokens)
                 .FirstOrDefaultAsync(x => x.UserName == request.Username, cancellationToken);
 
             await ValidateUserInfo(request, user);
 
-            var jwt = tokenFactory.GenerateJwtToken(user.Id, user.UserName);
-            var refreshToken = tokenFactory.GenerateRefreshToken();
+            var jwt = this._tokenFactory.GenerateJwtToken(user.Id, user.UserName);
+            var refreshToken = this._tokenFactory.GenerateRefreshToken();
 
             if (user.RefreshTokens.Any())
             {
@@ -60,8 +60,8 @@ namespace Template.API.Features.Identity.Commands
 
             user.RefreshTokens.Add(refreshToken);
 
-            context.Update(user);
-            await context.SaveChangesAsync(cancellationToken);
+            this._context.Update(user);
+            await this._context.SaveChangesAsync(cancellationToken);
 
             var response = new LoginResponseModel
             {
@@ -82,7 +82,7 @@ namespace Template.API.Features.Identity.Commands
                 throw new NotFoundException(nameof(User), request.Username);
             }
 
-            var passwordValid = await userManager.CheckPasswordAsync(user, request.Password);
+            var passwordValid = await this._userManager.CheckPasswordAsync(user, request.Password);
 
             if (!passwordValid)
             {

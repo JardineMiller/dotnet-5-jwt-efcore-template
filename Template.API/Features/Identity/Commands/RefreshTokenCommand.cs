@@ -20,18 +20,18 @@ namespace Template.API.Features.Identity.Commands
 
     public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, LoginResponseModel>
     {
-        private readonly ApplicationDbContext context;
-        private readonly TokenFactory tokenFactory;
+        private readonly ApplicationDbContext _context;
+        private readonly TokenFactory _tokenFactory;
 
         public RefreshTokenCommandHandler(ApplicationDbContext context, TokenFactory tokenFactory)
         {
-            this.context = context;
-            this.tokenFactory = tokenFactory;
+            this._context = context;
+            this._tokenFactory = tokenFactory;
         }
 
         public async Task<LoginResponseModel> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            var user = context
+            var user = this._context
                 .Users
                 .Include(u => u.RefreshTokens)
                 .FirstOrDefault(u => u.RefreshTokens.Any(t => t.Token == request.Token));
@@ -50,17 +50,17 @@ namespace Template.API.Features.Identity.Commands
             }
 
             // replace old refresh token with a new one and save
-            var newRefreshToken = tokenFactory.GenerateRefreshToken();
+            var newRefreshToken = this._tokenFactory.GenerateRefreshToken();
 
             oldRefreshToken.RevokedOn = DateTime.UtcNow;
             oldRefreshToken.ReplacedBy = newRefreshToken.Token;
 
             user.RefreshTokens.Add(newRefreshToken);
-            context.Update(user);
-            var task = context.SaveChangesAsync(cancellationToken);
+            this._context.Update(user);
+            var task = this._context.SaveChangesAsync(cancellationToken);
 
             // generate new jwt
-            var jwt = tokenFactory.GenerateJwtToken(user.Id, user.UserName);
+            var jwt = this._tokenFactory.GenerateJwtToken(user.Id, user.UserName);
 
             var response = new LoginResponseModel
             {

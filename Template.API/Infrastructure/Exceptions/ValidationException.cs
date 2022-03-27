@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,12 +9,14 @@ namespace Template.API.Infrastructure.Exceptions
 {
     public class ValidationException : HandledHttpResponseException
     {
-        public ValidationException(): base("One or more validation failures have occurred.")
+        public IDictionary<string, string[]> Failures { get; }
+
+        public ValidationException() : base("One or more validation failures have occurred.")
         {
             this.Failures = new Dictionary<string, string[]>();
         }
 
-        public ValidationException(List<ValidationFailure> failures): this()
+        public ValidationException(List<ValidationFailure> failures) : this()
         {
             var propertyNames = failures
                 .Select(e => e.PropertyName)
@@ -32,8 +33,6 @@ namespace Template.API.Infrastructure.Exceptions
             }
         }
 
-        public IDictionary<string, string[]> Failures { get; }
-        
         public override ExceptionHttpResponse CreateResponse()
         {
             return new ExceptionHttpResponse()

@@ -18,11 +18,11 @@ namespace Template.API.Features.Identity.Commands
 
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand>
     {
-        private readonly UserManager<User> userManager;
+        private readonly UserManager<User> _userManager;
 
         public RegisterUserCommandHandler(UserManager<User> userManager)
         {
-            this.userManager = userManager;
+            this._userManager = userManager;
         }
 
         public async Task<Unit> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ namespace Template.API.Features.Identity.Commands
                 UserName = request.Username
             };
 
-            var result = await userManager.CreateAsync(user, request.Password);
+            var result = await this._userManager.CreateAsync(user, request.Password);
 
             if (!result.Succeeded)
             {

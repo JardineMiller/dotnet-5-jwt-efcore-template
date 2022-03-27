@@ -18,16 +18,16 @@ namespace Template.API.Features.Identity.Commands
 
     public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand, bool>
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext _context;
 
         public RevokeTokenCommandHandler(ApplicationDbContext context)
         {
-            this.context = context;
+            this._context = context;
         }
 
         public async Task<bool> Handle(RevokeTokenCommand request, CancellationToken cancellationToken)
         {
-            var user = context
+            var user = this._context
                 .Users
                 .Include(u => u.RefreshTokens)
                 .FirstOrDefault(u => u.RefreshTokens.Any(t => t.Token == request.Token));
@@ -50,8 +50,8 @@ namespace Template.API.Features.Identity.Commands
             // revoke token and save
             refreshToken.RevokedOn = DateTime.UtcNow;
 
-            context.Update(user);
-            await context.SaveChangesAsync(cancellationToken);
+            this._context.Update(user);
+            await this._context.SaveChangesAsync(cancellationToken);
 
             return true;
         }

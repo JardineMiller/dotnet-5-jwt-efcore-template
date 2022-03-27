@@ -9,6 +9,11 @@ namespace Template.API.Features.Tasks.Models
         public string Description { get; set; }
         public string AssigneeId { get; set; }
 
+        public TaskResponseModel()
+        {
+
+        }
+
         public TaskResponseModel(Task task)
         {
             this.Name = task.Name;

@@ -15,7 +15,7 @@ namespace Template.API.Infrastructure.Extensions
             dbContext?.Database.Migrate();
         }
 
-        public static IApplicationBuilder UseSwaggerUI(this IApplicationBuilder app)
+        public static IApplicationBuilder UseSwaggerUi(this IApplicationBuilder app)
         {
             app
                 .UseSwagger()

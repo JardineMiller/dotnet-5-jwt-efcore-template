@@ -7,20 +7,20 @@ namespace Template.API.Infrastructure.Middleware
 {
     public class CustomExceptionHandlerMiddleware
     {
-        private readonly IExceptionLogger logger;
-        private readonly RequestDelegate next;
+        private readonly IExceptionLogger _logger;
+        private readonly RequestDelegate _next;
 
         public CustomExceptionHandlerMiddleware(RequestDelegate next, IExceptionLogger logger)
         {
-            this.next = next;
-            this.logger = logger;
+            this._next = next;
+            this._logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await this.next(context);
+                await this._next(context);
             }
             catch (HandledHttpResponseException ex)
             {
@@ -31,7 +31,7 @@ namespace Template.API.Infrastructure.Middleware
         private Task HandleExceptionAsync(HttpContext context, HandledHttpResponseException exception)
         {
             var response = exception.CreateResponse();
-            this.logger.LogException(exception);
+            this._logger.LogException(exception);
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int) response.StatusCode;

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Template.API.Features.Tasks.Models;
@@ -20,7 +21,7 @@ namespace Template.API.Features.Tasks.Queries
 
         public GetUserTasksQueryHandler(ApplicationDbContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
         public async Task<IEnumerable<TaskResponseModel>> Handle(GetUserTasksQuery request, CancellationToken cancellationToken)
@@ -30,6 +31,18 @@ namespace Template.API.Features.Tasks.Queries
                 .Where(x => x.AssigneeId == request.UserId)
                 .Select(x => new TaskResponseModel(x))
                 .ToListAsync(cancellationToken);
+        }
+    }
+
+    public class GetUserTasksQueryValidator : AbstractValidator<GetUserTasksQuery>
+    {
+        public GetUserTasksQueryValidator()
+        {
+            RuleFor(x => x.UserId)
+                .Cascade(CascadeMode.Stop)
+                .NotNull()
+                .NotEmpty()
+                .Matches(@"\A\S+\z");
         }
     }
 }

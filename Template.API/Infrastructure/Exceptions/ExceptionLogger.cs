@@ -5,11 +5,11 @@ namespace Template.API.Infrastructure.Exceptions
 {
     public class ExceptionLogger : IExceptionLogger
     {
-        private readonly ILogger<ExceptionLogger> logger;
+        private readonly ILogger<ExceptionLogger> _logger;
         
         public ExceptionLogger(ILogger<ExceptionLogger> logger)
         {
-            this.logger = logger;
+            this._logger = logger;
         }
         
         public void LogException(ILoggableException exception)
@@ -21,11 +21,11 @@ namespace Template.API.Infrastructure.Exceptions
                 //     break;
 
                 case NotFoundException notFoundException:
-                    this.logger.LogWarning($"[{nameof(NotFoundException)}] occurred: [{notFoundException.Message}]");
+                    this._logger.LogWarning($"[{nameof(NotFoundException)}] occurred: [{notFoundException.Message}]");
                     break;
 
                 case ValidationException validationException:
-                    this.logger.LogWarning($"[{nameof(ValidationException)}] occurred: [{JsonConvert.SerializeObject(validationException.Failures)}]");
+                    this._logger.LogWarning($"[{nameof(ValidationException)}] occurred: [{JsonConvert.SerializeObject(validationException.Failures)}]");
                     break;
             }
         }

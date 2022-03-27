@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Template.API.Controllers;
 using Template.API.Features.Identity.Commands;
 using Template.API.Features.Identity.Models;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +13,7 @@ namespace Template.API.Features.Identity
         [Route(nameof(Register))]
         public async Task<ActionResult> Register(RegisterUserCommand cmd)
         {
-            await Mediator.Send(cmd);
+            await this.Mediator.Send(cmd);
             return Ok();
         }
 
@@ -22,7 +21,7 @@ namespace Template.API.Features.Identity
         [Route(nameof(Login))]
         public async Task<ActionResult<LoginResponseModel>> Login(LoginCommand cmd)
         {
-            var response = await Mediator.Send(cmd);
+            var response = await this.Mediator.Send(cmd);
 
             SetTokenCookie(response.RefreshToken);
             return Ok(response);
@@ -31,7 +30,7 @@ namespace Template.API.Features.Identity
         [HttpPost("refresh-token")]
         public async Task<ActionResult<LoginResponseModel>> RefreshToken()
         {
-            var refreshToken = Request.Cookies["refreshToken"];
+            var refreshToken = this.Request.Cookies["refreshToken"];
 
             if (refreshToken == null)
             {
@@ -39,7 +38,7 @@ namespace Template.API.Features.Identity
             }
 
             var cmd = new RefreshTokenCommand {Token = refreshToken};
-            var response = await Mediator.Send(cmd);
+            var response = await this.Mediator.Send(cmd);
 
             SetTokenCookie(response.RefreshToken);
             return Ok(response);
@@ -48,12 +47,12 @@ namespace Template.API.Features.Identity
         [HttpPost("revoke-token")]
         public async Task<ActionResult> RevokeToken()
         {
-            var refreshToken = Request.Cookies["refreshToken"];
+            var refreshToken = this.Request.Cookies["refreshToken"];
             var cmd = new RevokeTokenCommand {Token = refreshToken};
 
-            Response.Cookies.Delete("refreshToken");
+            this.Response.Cookies.Delete("refreshToken");
 
-            await Mediator.Send(cmd);
+            await this.Mediator.Send(cmd);
             return Ok();
         }
 
@@ -67,8 +66,8 @@ namespace Template.API.Features.Identity
                 Secure = true
             };
 
-            Response.Cookies.Delete("refreshToken");
-            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+            this.Response.Cookies.Delete("refreshToken");
+            this.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
         }
     }
 }

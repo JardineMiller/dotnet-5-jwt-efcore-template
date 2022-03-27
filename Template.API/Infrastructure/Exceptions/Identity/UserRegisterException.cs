@@ -8,19 +8,19 @@ namespace Template.API.Infrastructure.Exceptions.Identity
 {
     public class UserRegisterException : HandledHttpResponseException
     {
+        private readonly IEnumerable<IdentityError> _errors;
+
         public UserRegisterException(IEnumerable<IdentityError> errors)
         {
-            this.Errors = errors;
+            this._errors = errors;
         }
 
-        private IEnumerable<IdentityError> Errors { get; }
-        
         public override ExceptionHttpResponse CreateResponse()
         {
             return new ExceptionHttpResponse()
             {
                 StatusCode = HttpStatusCode.BadRequest,
-                ResultMessage = JsonConvert.SerializeObject(this.Errors)
+                ResultMessage = JsonConvert.SerializeObject(this._errors)
             };
         }
     }

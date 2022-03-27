@@ -5,12 +5,12 @@ namespace Template.Tests.Common
 {
     public class QueryTestBase : IDisposable
     {
+        public ApplicationDbContext Context { get; }
+
         public QueryTestBase()
         {
             this.Context = DbContextFactory.Create();
         }
-
-        public ApplicationDbContext Context { get; }
 
         public void Dispose()
         {
