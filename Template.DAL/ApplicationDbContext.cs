@@ -5,6 +5,7 @@ using Template.DAL.Models.Base;
 using Template.DAL.Models.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Task = Template.DAL.Models.Entities.Task;
 
 namespace Template.DAL
 {
@@ -17,6 +18,7 @@ namespace Template.DAL
         }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Task> Tasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,7 +36,7 @@ namespace Template.DAL
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
-            CancellationToken cancellationToken = new CancellationToken())
+            CancellationToken cancellationToken = new())
         {
             ApplyAuditInformation();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);

@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.API", "Template.AP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.DAL", "Template.DAL\Template.DAL.csproj", "{F4596A30-2638-4BB3-B2B2-DF0EF6D41AFC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Tests", "Template.Tests\Template.Tests.csproj", "{B0F019A5-6E3E-4AAA-A283-CEE7A379A0CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,5 +29,11 @@ Global
 		{F4596A30-2638-4BB3-B2B2-DF0EF6D41AFC}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{F4596A30-2638-4BB3-B2B2-DF0EF6D41AFC}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
 		{F4596A30-2638-4BB3-B2B2-DF0EF6D41AFC}.Staging|Any CPU.Build.0 = Staging|Any CPU
+		{B0F019A5-6E3E-4AAA-A283-CEE7A379A0CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0F019A5-6E3E-4AAA-A283-CEE7A379A0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0F019A5-6E3E-4AAA-A283-CEE7A379A0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0F019A5-6E3E-4AAA-A283-CEE7A379A0CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0F019A5-6E3E-4AAA-A283-CEE7A379A0CE}.Staging|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0F019A5-6E3E-4AAA-A283-CEE7A379A0CE}.Staging|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal

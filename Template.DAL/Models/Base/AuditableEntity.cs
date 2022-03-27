@@ -10,7 +10,6 @@ namespace Template.DAL.Models.Base
 
     public class AuditableEntity : BaseEntity, IAuditableEntity
     {
-        public string ModifiedBy { get; set; }
         public DateTimeOffset CreatedOn { get; set; }
         public DateTimeOffset? ModifiedOn { get; set; }
     }

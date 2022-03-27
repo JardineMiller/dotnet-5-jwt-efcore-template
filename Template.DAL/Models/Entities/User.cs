@@ -7,7 +7,9 @@ namespace Template.DAL.Models.Entities
 {
     public class User : IdentityUser, IAuditableEntity
     {
-        public List<RefreshToken> RefreshTokens { get; } = new List<RefreshToken>();
+        public List<Task> Tasks { get; } = new();
+        public List<RefreshToken> RefreshTokens { get; } = new();
+
         public DateTimeOffset CreatedOn { get; set; }
         public DateTimeOffset? ModifiedOn { get; set; }
     }
